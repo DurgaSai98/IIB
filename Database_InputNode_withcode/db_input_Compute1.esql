@@ -1,0 +1,41 @@
+DECLARE VAR SHARED INTEGER 1;
+
+CREATE COMPUTE MODULE db_input_Compute1
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	
+	
+        DECLARE var REFERENCE TO InputExceptionList.*[<];	
+		DECLARE file CHARACTER;
+
+	
+		DECLARE exc CHARACTER;
+	
+		DECLARE text CHARACTER;
+		DECLARE number INTEGER;
+		
+		while LASTMOVE (var) DO
+			move var LASTCHILD;
+			SET number=var.Number;
+			IF number IS NOT NULL THEN
+				
+				SET file = var.File;
+				SET text = var.Text;
+				SET number = var.Number;
+			END IF;		
+		end WHILE;
+		
+		SET OutputRoot.XMLNSC.Exception_Details.File = file;
+		SET OutputRoot.XMLNSC.Exception_Details.Text = text;
+		SET OutputRoot.XMLNSC.Exception_Details.Number = number;
+		CALL ERR (VAR,ApplicationLabel,MessageFlowLabel,text,file,CURRENT_TIMESTAMP);
+	SET VAR=VAR+1;
+
+		RETURN TRUE;
+	END;
+	
+END MODULE;
+
+CREATE PROCEDURE ERR ( IN MSGID INTEGER, IN APPLICATION_NAME CHARACTER,IN MSGFLOW CHARACTER,IN MESSAGE_TYPE CHARACTER,IN MESSAGE CHARACTER,IN LOGGED_ON TIMESTAMP)
+LANGUAGE DATABASE
+EXTERNAL NAME DBPROFORLOG;
