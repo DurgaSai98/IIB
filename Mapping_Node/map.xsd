@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="AADHAR_NO" type="xsd:string"/>
+  <xsd:element name="request">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="FIRST_NAME"/>
+        <xsd:element ref="LAST_NAME"/>
+        <xsd:element ref="AADHAR_NO"/>
+        <xsd:element ref="MOBILE_NO"/>
+        <xsd:element ref="DOB"/>
+        <xsd:element ref="ADDRESS"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="MOBILE_NO" type="xsd:string"/>
+  <xsd:element name="DOB" type="xsd:string"/>
+  <xsd:element name="ADDRESS" type="xsd:string"/>
+  <xsd:element name="LAST_NAME" type="xsd:string"/>
+  <xsd:element name="FIRST_NAME" type="xsd:string"/>
+</xsd:schema>

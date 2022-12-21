@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><mappingRoot xmlns="http://www.ibm.com/2008/ccl/Mapping" domainID="com.ibm.msl.mapping.xml" domainIDExtension="mb" mainMap="true" targetNamespace="default" version="8.0.5.0" xmlns:map="default">
+    <input path="/map.xsd"/>
+    <output path="jar:file://!com/ibm/etools/mft/map/xsds/predefined/JsonDomainMsg.xsd" var="var"/>
+    <generation engine="xquery"/>
+    <mappingDeclaration name="Map_xml_to_json">
+        <input path="mb:msg(request,assembly,XMLNSC,Properties)" var="MessageAssembly"/>
+        <output namespace="http://www.ibm.com/iib/msl/json" path="$var/mb:msg(JSON,assembly,JSON,Properties)" var="MessageAssembly1">
+            <cast castType="userDefined" path="$MessageAssembly1/JSON/Data/type('anyType')" qualifier="{http://www.ibm.com/iib/msl/json}JSONObject" ref="var"/>
+        </output>
+        <move>
+            <input path="$MessageAssembly/Properties"/>
+            <output path="$MessageAssembly1/Properties"/>
+        </move>
+        <local>
+            <input path="$MessageAssembly/request"/>
+            <output path="$MessageAssembly1/JSON"/>
+            <local>
+                <input path="."/>
+                <output path="spath('Data',2)"/>
+                <move>
+                    <input path="."/>
+                    <output path="any"/>
+                </move>
+            </local>
+        </local>
+    </mappingDeclaration>
+</mappingRoot>

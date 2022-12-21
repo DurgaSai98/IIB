@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><mappingRoot xmlns="http://www.ibm.com/2008/ccl/Mapping" domainID="com.ibm.msl.mapping.xml" domainIDExtension="mb" mainMap="true" targetNamespace="default" version="8.0.5.0" xmlns:map="default">
+    <inlinedXMLSchema><![CDATA[<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">  
+            <xsd:element name="output" nillable="true" type="xsd:string"/>  
+</xsd:schema>]]></inlinedXMLSchema>
+    <input path="jar:file://!com/ibm/msl/mapping/rdb/xsds/dbreturn.xsd" var="var"/>
+    <input path="/map.xsd" var="var1"/>
+    <input inlinedXMLSchema="true" path="../schema_0.xsd" var="var3"/>
+    <output path="db:table(/xe.dbm,xe,SYSTEM,AADHAR_DB)" var="AADHARDB"/>
+    <output path="jar:file://!com/ibm/etools/mft/map/xsds/predefined/JsonDomainMsg.xsd" var="var2"/>
+    <namespaces>
+        <namespace kind="supplement" prefix="out" uri="http://www.ibm.com/iib/msl/json"/>
+    </namespaces>
+    <generation engine="xquery"/>
+    <mappingDeclaration name="Map_Insert">
+        <input path="$var1/mb:msg(request,assembly,XMLNSC,Properties)" var="MessageAssembly"/>
+        <output path="$AADHARDB/db:insert(fn:false(),FIRST_NAME,LAST_NAME,AADHAR_NO,MOBILE_NO,DOB,ADDRESS)" var="dbinsert"/>
+        <output namespace="http://www.ibm.com/iib/msl/json" path="$var2/mb:msg(JSON,assembly,JSON,Properties)" var="MessageAssembly1">
+            <cast castType="userDefined" path="$MessageAssembly1/JSON/Data/type('anyType')" qualifier="{http://www.ibm.com/iib/msl/json}JSONObject" ref="var2" var="anyType"/>
+            <cast castType="userDefined" path="$MessageAssembly1/JSON/spath('Data',2)/any" qualifier="output" ref="var3" var="any"/>
+        </output>
+        <transaction>
+            <insert ref="dbinsert">
+                <input path="$MessageAssembly/request"/>
+                <output path="$dbinsert/."/>
+                <move automap="true">
+                    <input path="FIRST_NAME"/>
+                    <output path="FIRST_NAME"/>
+                </move>
+                <move automap="true">
+                    <input path="LAST_NAME"/>
+                    <output path="LAST_NAME"/>
+                </move>
+                <move automap="true">
+                    <input path="AADHAR_NO"/>
+                    <output path="AADHAR_NO"/>
+                </move>
+                <move automap="true">
+                    <input path="MOBILE_NO"/>
+                    <output path="MOBILE_NO"/>
+                </move>
+                <move automap="true">
+                    <input path="DOB"/>
+                    <output path="DOB"/>
+                </move>
+                <move automap="true">
+                    <input path="ADDRESS"/>
+                    <output path="ADDRESS"/>
+                </move>
+            </insert>
+            <return>
+                <input path="$var/DBInsertReturn"/>
+                <output path="$MessageAssembly1/JSON"/>
+                <assign value="inserted successfully completed">
+                    <output path="spath('Data',2)/output"/>
+                </assign>
+            </return>
+        </transaction>
+        <task type="todo">
+            <input path="$MessageAssembly/Properties"/>
+        </task>
+    </mappingDeclaration>
+</mappingRoot>
