@@ -10,6 +10,7 @@ CREATE COMPUTE MODULE functions_Compute
 		
 		
 		--this code is for knowingh purpose
+		--this is for demo
 	END;
 
 	CREATE PROCEDURE CopyMessageHeaders() BEGIN
