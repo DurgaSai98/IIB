@@ -7,6 +7,9 @@ CREATE COMPUTE MODULE functions_Compute
 		-- CALL CopyMessageHeaders();
 		 CALL CopyEntireMessage();
 		RETURN TRUE;
+		
+		
+		--this code is for knowingh purpose
 	END;
 
 	CREATE PROCEDURE CopyMessageHeaders() BEGIN
