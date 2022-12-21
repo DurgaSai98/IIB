@@ -1,0 +1,69 @@
+
+
+
+CREATE COMPUTE MODULE functions_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		--SET OutputRoot = InputRoot;
+		
+	--	DECLARE var REFERENCE TO InputRoot.XMLNSC;
+		
+		
+		
+	--	set var=REPLICATE('sai',3);   -- response (saisaisai)
+	--	set var=OVERLAY('durgasai' PLACING '******' from 1 FOR 6); -- response (******ai)
+	 
+	--	SET var = REPLACE ('sai','a','****');  -- response (s******i)
+	
+	--    DECLARE activity_log BOOLEAN;
+	    
+	  --   SET var = TRANSLATE('sai', 'a','j');    -- reponse (sji)
+	  
+	 -- SET var= POSITION('a' in 'durgasaia' FROM 6 REPEAT 2); -- it will shows the particular postion from source string.
+	                                                         -- response is '9' 3rd time repeated 'a' postion is 9. 
+	  
+	 
+	 -- SET var = LOWER ('Mrs sai');    -- it will convert the lower case letters from the source.
+	  
+	-- SET var = TRIM ('d' FROM 'dddurgasaidddd');  -- it will removes the first and last letters from the source.
+	                                           -- response is (urgasai).
+	                               
+	  -- set var=SUBSTRING ('helloworld' FROM 6 FOR 5  );  -- it will creates the another String.
+	                                                     --response is (world);
+	   
+	
+	   
+		--set OutputRoot.JSON.Data.response=var;
+	--	 DECLARE blobs BLOB;
+    	DECLARE original CHARACTER 'hi hello how are you ';
+    	--set blobs=ASBITSTREAM(original CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding );
+    
+        DECLARE encoded CHARACTER BASE64ENCODE(original);   -- encoding value = SGVsbG8gV29ybGQgc2RhZkFTSEpkZmFzdWhn
+        DECLARE decoded BLOB BASE64DECODE(encoded);         -- decoded:BLOB:[B@c05b6bd2
+        DECLARE decoded2 CHARACTER CAST(decoded AS CHARACTER CCSID 1208);
+		
+           SET OutputRoot.JSON.Data.request.details=decoded2;
+
+  -- SET var = STARTSWITH('hello world','h');
+		--CREATE LASTCHILD OF OutputRoot DOMAIN ('JSON') PARSE (decoded);
+		-- CREATE LASTCHILD OF OutputRoot.JSON DOMAIN('Data') PARSE(decoded);
+		
+		
+	END;
+END MODULE;
